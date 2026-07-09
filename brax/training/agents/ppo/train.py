@@ -108,9 +108,9 @@ def _maybe_wrap_env(
     wrap_for_training = envs.training.wrap
   env = wrap_for_training(
       env,
-      episode_length=episode_length,
-      action_repeat=action_repeat,
-      randomization_fn=v_randomization_fn,
+      episode_length=episode_length,  # pyrefly: ignore[unexpected-keyword]
+      action_repeat=action_repeat,  # pyrefly: ignore[unexpected-keyword]
+      randomization_fn=v_randomization_fn,  # pyrefly: ignore[unexpected-keyword]
   )  # pytype: disable=wrong-keyword-args
   return env
 
@@ -158,7 +158,7 @@ def _random_translate_pixels(
         out[k_view] = rt_view(v_view, 4, key_shift)
     return {**ub_obs, **out}
 
-  bdim = next(iter(obs.items()), None)[1].shape[0]
+  bdim = next(iter(obs.items()), None)[1].shape[0]  # pyrefly: ignore[unsupported-operation]
   keys = jax.random.split(key, bdim)
   obs = rt_all_views(obs, keys)
   return obs
@@ -440,7 +440,7 @@ def train(
     )
 
   ppo_network = network_factory(
-      obs_shape, env.action_size, preprocess_observations_fn=normalize
+      obs_shape, env.action_size, preprocess_observations_fn=normalize  # pyrefly: ignore[bad-argument-type]
   )
   make_policy = ppo_networks.make_inference_fn(
       ppo_network,
@@ -481,7 +481,7 @@ def train(
   )
 
   loss_and_pgrad_fn = gradients.loss_and_pgrad(
-      loss_fn, pmap_axis_name=_PMAP_AXIS_NAME, has_aux=True
+      loss_fn, pmap_axis_name=_PMAP_AXIS_NAME, has_aux=True  # pyrefly: ignore[bad-argument-type]
   )
 
   steps_between_logging = training_metrics_steps or env_step_per_training_step
@@ -725,9 +725,9 @@ def train(
   if restore_checkpoint_path is not None:
     params = checkpoint.load(restore_checkpoint_path)
     value_params = params[2] if restore_value_fn else init_params.value
-    training_state = training_state.replace(
+    training_state = training_state.replace(  # pyrefly: ignore[missing-attribute]
         normalizer_params=params[0],
-        params=training_state.params.replace(
+        params=training_state.params.replace(  # pyrefly: ignore[missing-attribute]
             policy=params[1], value=value_params
         ),
     )
@@ -735,9 +735,9 @@ def train(
   if restore_params is not None:
     logging.info('Restoring TrainingState from `restore_params`.')
     value_params = restore_params[2] if restore_value_fn else init_params.value
-    training_state = training_state.replace(
+    training_state = training_state.replace(  # pyrefly: ignore[missing-attribute]
         normalizer_params=restore_params[0],
-        params=training_state.params.replace(
+        params=training_state.params.replace(  # pyrefly: ignore[missing-attribute]
             policy=restore_params[1], value=value_params
         ),
     )
@@ -779,7 +779,7 @@ def train(
       eval_env,
       functools.partial(make_policy, deterministic=deterministic_eval),
       num_eval_envs=num_eval_envs,
-      episode_length=episode_length,
+      episode_length=episode_length,  # pyrefly: ignore[bad-argument-type]
       action_repeat=action_repeat,
       key=eval_key,
   )

@@ -248,9 +248,9 @@ def compute_ppo_loss(
   if use_distributional_critic:
     v_loss = (
         quantile_huber_loss(
-            baseline_quantiles,
+            baseline_quantiles,  # pyrefly: ignore[bad-argument-type]
             gae_returns,
-            kappa=clipping_epsilon_value,
+            kappa=clipping_epsilon_value,  # pyrefly: ignore[bad-argument-type]
         )
         * vf_coefficient
     )

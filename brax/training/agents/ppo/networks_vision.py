@@ -111,7 +111,7 @@ def make_ppo_networks_vision(
       str(cnn_padding).lower(), cnn_padding
   )
   resolved_cnn_activation: networks.ActivationFn = (
-      networks.ACTIVATION[cnn_activation]
+      networks.ACTIVATION[cnn_activation]  # pyrefly: ignore[bad-assignment]
       if isinstance(cnn_activation, str)
       else cnn_activation
   )
@@ -171,7 +171,7 @@ def make_ppo_networks_vision(
       cnn_global_pool=cnn_global_pool,
       cnn_kernel_init=resolved_cnn_kernel_init_fn(**cnn_kernel_init_kwargs_),
       output_kernel_init=(
-          resolved_output_kernel_init_fn(**output_kernel_init_kwargs_)
+          resolved_output_kernel_init_fn(**output_kernel_init_kwargs_)  # pyrefly: ignore[bad-argument-type]
           if resolved_output_kernel_init_fn is not None else None
       ),
   )

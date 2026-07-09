@@ -83,7 +83,7 @@ def make_inference_fn(
           )
       return postprocessed_actions, extras
 
-    return policy
+    return policy  # pyrefly: ignore[bad-return]
 
   return make_policy
 

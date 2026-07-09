@@ -374,7 +374,7 @@ def main(unused_argv):
           batch_size=_BATCH_SIZE.value,
           min_replay_size=_MIN_REPLAY_SIZE.value,
           max_replay_size=_MAX_REPLAY_SIZE.value,
-          network_factory=network_factory,
+          network_factory=network_factory,  # pyrefly: ignore[bad-argument-type]
           learning_rate=_LEARNING_RATE.value,
           discounting=_DISCOUNTING.value,
           max_devices_per_host=_MAX_DEVICES_PER_HOST.value,
@@ -515,7 +515,7 @@ def main(unused_argv):
           randomization_fn=randomizer_fn,
           num_timesteps=_TOTAL_ENV_STEPS.value,
           episode_length=_EPISODE_LENGTH.value,
-          network_factory=network_factory,
+          network_factory=network_factory,  # pyrefly: ignore[bad-argument-type]
           action_repeat=_ACTION_REPEAT.value,
           num_envs=_NUM_ENVS.value,
           num_eval_envs=_NUM_EVAL_ENVS.value,
@@ -550,7 +550,7 @@ def main(unused_argv):
           eval_env=get_environment(_ENV.value),
           wrap_env_fn=wrap_fn,
           randomization_fn=randomizer_fn,
-          policy_updates=_POLICY_UPDATES.value,
+          policy_updates=_POLICY_UPDATES.value,  # pyrefly: ignore[bad-argument-type]
           num_envs=_NUM_ENVS.value,
           action_repeat=_ACTION_REPEAT.value,
           num_evals=_NUM_EVALS.value,
@@ -641,7 +641,7 @@ def main(unused_argv):
   trajectories = [None] * _NUM_VIDEOS.value
   for i in range(_NUM_VIDEOS.value):
     t = jax.tree.map(lambda x, i=i: x[i], traj_stacked)
-    trajectories[i] = [
+    trajectories[i] = [  # pyrefly: ignore[unsupported-operation]
         jax.tree.map(lambda x, j=j: x[j], t)
         for j in range(_EPISODE_LENGTH.value)
     ]

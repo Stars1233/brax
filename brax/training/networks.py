@@ -415,7 +415,7 @@ class VisionPolicyWithStd(linen.Module):
 
 
 def _get_obs_state_size(obs_size: types.ObservationSize, obs_key: str) -> int:
-  obs_size = obs_size[obs_key] if isinstance(obs_size, Mapping) else obs_size
+  obs_size = obs_size[obs_key] if isinstance(obs_size, Mapping) else obs_size  # pyrefly: ignore[bad-assignment]
   return jax.tree_util.tree_flatten(obs_size)[0][-1]
 
 
@@ -634,7 +634,7 @@ def make_value_network(
       v_estimate, quantiles = value_module.apply(value_params, obs)
       return jnp.squeeze(v_estimate, axis=-1), quantiles
     else:
-      return jnp.squeeze(value_module.apply(value_params, obs), axis=-1)
+      return jnp.squeeze(value_module.apply(value_params, obs), axis=-1)  # pyrefly: ignore[bad-argument-type]
 
   obs_size = _get_obs_state_size(obs_size, obs_key)
   dummy_obs = jnp.zeros((1, obs_size))
@@ -749,9 +749,9 @@ def normalizer_select(
 ) -> running_statistics.RunningStatisticsState:
   return running_statistics.RunningStatisticsState(
       count=processor_params.count,
-      mean=processor_params.mean[obs_key],
-      summed_variance=processor_params.summed_variance[obs_key],
-      std=processor_params.std[obs_key],
+      mean=processor_params.mean[obs_key],  # pyrefly: ignore[bad-index]
+      summed_variance=processor_params.summed_variance[obs_key],  # pyrefly: ignore[bad-index]
+      std=processor_params.std[obs_key],  # pyrefly: ignore[bad-index]
   )
 
 
@@ -885,7 +885,7 @@ def make_value_network_vision(
           obs[state_obs_key], normalizer_select(processor_params, state_obs_key)
       )
       obs = {**obs, state_obs_key: state_obs}
-    return jnp.squeeze(value_module.apply(policy_params, obs), axis=-1)
+    return jnp.squeeze(value_module.apply(policy_params, obs), axis=-1)  # pyrefly: ignore[bad-argument-type]
 
   dummy_obs = {
       key: jnp.zeros((1,) + shape) for key, shape in observation_size.items()
@@ -937,7 +937,7 @@ def make_policy_network_latents(
     )
 
   dummy_obs = {
-      key: jnp.zeros((1,) + shape) for key, shape in observation_size.items()
+      key: jnp.zeros((1,) + shape) for key, shape in observation_size.items()  # pyrefly: ignore[unsupported-operation]
   }
   return FeedForwardNetwork(
       init=lambda key: module.init(key, dummy_obs), apply=apply
