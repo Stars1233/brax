@@ -100,7 +100,7 @@ def train(
     deterministic_eval: bool = False,
     network_factory: types.NetworkFactory[
         es_networks.ESNetworks
-    ] = es_networks.make_es_networks,
+    ] = es_networks.make_es_networks,  # pyrefly: ignore[bad-function-definition]
     progress_fn: Callable[[int, Metrics], None] = lambda *args: None,
     eval_env: Optional[envs.Env] = None,
     randomization_fn: Optional[
@@ -152,9 +152,9 @@ def train(
       )
     env = wrap_for_training(
         env,
-        episode_length=episode_length,
-        action_repeat=action_repeat,
-        randomization_fn=v_randomization_fn,
+        episode_length=episode_length,  # pyrefly: ignore[unexpected-keyword]
+        action_repeat=action_repeat,  # pyrefly: ignore[unexpected-keyword]
+        randomization_fn=v_randomization_fn,  # pyrefly: ignore[unexpected-keyword]
     )  # pytype: disable=wrong-keyword-args
 
   obs_size = env.observation_size
@@ -167,7 +167,7 @@ def train(
   es_network = network_factory(
       observation_size=obs_size,
       action_size=env.action_size,
-      preprocess_observations_fn=normalize_fn,
+      preprocess_observations_fn=normalize_fn,  # pyrefly: ignore[bad-argument-type]
   )
   make_policy = es_networks.make_inference_fn(es_network)
 
@@ -348,7 +348,7 @@ def train(
     )
     weights = jax.reshard(weights, sharding_repl)
 
-    weights = fitness_shaping.value(weights)
+    weights = fitness_shaping.value(weights)  # pyrefly: ignore[not-callable]
 
     if center_fitness:
       weights = (weights - jnp.mean(weights)) / (1e-6 + jnp.std(weights))
@@ -413,7 +413,7 @@ def train(
     return training_state, metrics  # pytype: disable=bad-return-type  # py311-upgrade
 
   normalizer_params = running_statistics.init_state(
-      specs.Array((obs_size,), jnp.dtype('float32'))
+      specs.Array((obs_size,), jnp.dtype('float32'))  # pyrefly: ignore[bad-argument-type]
   )
   policy_params = es_network.policy_network.init(network_key)
   optimizer_state = optimizer.init(policy_params)
@@ -431,11 +431,11 @@ def train(
       v_randomization_fn = functools.partial(
           randomization_fn, rng=jax.random.split(eval_key, num_eval_envs)
       )
-    eval_env = wrap_for_training(
+    eval_env = wrap_for_training(  # pyrefly: ignore[unbound-name]
         eval_env,
-        episode_length=episode_length,
-        action_repeat=action_repeat,
-        randomization_fn=v_randomization_fn,
+        episode_length=episode_length,  # pyrefly: ignore[unexpected-keyword]
+        action_repeat=action_repeat,  # pyrefly: ignore[unexpected-keyword]
+        randomization_fn=v_randomization_fn,  # pyrefly: ignore[unbound-name, unexpected-keyword]
     )  # pytype: disable=wrong-keyword-args
 
   # Evaluator function
@@ -482,4 +482,4 @@ def train(
 
   logging.info('total steps: %s', total_steps)
   params = training_state.normalizer_params, training_state.policy_params
-  return (make_policy, params, metrics)
+  return (make_policy, params, metrics)  # pyrefly: ignore[unbound-name]

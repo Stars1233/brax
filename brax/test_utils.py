@@ -72,7 +72,7 @@ def sample_mujoco_states(
   # give a little kick to avoid symmetry
   data.qvel = np.random.uniform(low=-0.01, high=0.01, size=(model.nv,))
   if random_init:
-    data.qpos = np.random.uniform(model.nq) * random_q_scale
+    data.qpos = np.random.uniform(model.nq) * random_q_scale  # pyrefly: ignore[bad-assignment]
     data.qpos = _normalize_q(model, data.qpos)
     data.qvel = np.random.uniform(size=(model.nv,)) * random_qd_scale
   for i in range(count):

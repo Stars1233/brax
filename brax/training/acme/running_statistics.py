@@ -188,7 +188,7 @@ def update(state: RunningStatisticsState,
     if weights is not None:
       if weights.shape != batch_dims:
         raise ValueError(f'{weights.shape} != {batch_dims}')
-    _validate_batch_shapes(batch, state.mean, batch_dims)
+    _validate_batch_shapes(batch, state.mean, batch_dims)  # pyrefly: ignore[bad-argument-type]
 
   if state.mode == NormalizationMode.EMA:
     # RSL-RL's EmpiricalNormalization algorithm uses
