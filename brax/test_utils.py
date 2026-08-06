@@ -122,7 +122,7 @@ def benchmark(
   times = []
   for i in range(5):
     t = time.time()
-    jax.tree_util.tree_map(lambda x: x.block_until_ready(), run_batch(i))
+    jax.tree_util.tree_map(lambda x: x.block_until_ready(), run_batch(i))  # pyrefly: ignore[bad-argument-type]
     times.append(time.time() - t)
   op_time = jp.mean(jp.array(times[1:]))  # ignore JIT time
 
